@@ -36,45 +36,27 @@ st.markdown("""
     h2 { font-size: 2rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.5rem !important; }
 
-    /* --- KAMERA BUTONU TÜRKÇELEŞTİRME HİLESİ --- */
-    /* 1. Orijinal 'Take Photo' yazısını görünmez yap */
-    button[kind="primary"] {
-        color: transparent !important;
-    }
-    
-    /* 2. Üzerine 'Fotoğrafı Çek' yazısı ekle */
+    /* --- KAMERA BUTONU TÜRKÇELEŞTİRME --- */
+    button[kind="primary"] { color: transparent !important; }
     div[data-testid="stCameraInput"] button[kind="primary"]::after {
         content: "📸 FOTOĞRAFI ÇEK";
         color: white;
         font-weight: bold;
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; align-items: center; justify-content: center;
     }
     
-    /* 3. 'Clear Photo' yazısını Türkçeleştir (Fotoğrafı çektikten sonra çıkan buton) */
-    div[data-testid="stCameraInput"] button[kind="secondary"] {
-        color: transparent !important;
-    }
+    /* Temizleme butonu */
+    div[data-testid="stCameraInput"] button[kind="secondary"] { color: transparent !important; }
     div[data-testid="stCameraInput"] button[kind="secondary"]::after {
         content: "🔄 Yeniden Çek";
         color: #31333F;
         font-weight: bold;
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; align-items: center; justify-content: center;
     }
-
     </style>
 """, unsafe_allow_html=True)
 
@@ -127,9 +109,9 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("Yazılı Oku v2.2 - Final")
+    st.caption("© SİNAN SAYILIR")
 
-st.title("🧠 AI Sınav Okuma V5.2")
+st.title("🧠 AI Sınav Okuma V5.3")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
@@ -154,7 +136,6 @@ with col_sag:
     st.markdown("---")
 
     if mod == SECENEK_DOSYA:
-        # label_visibility="collapsed" ile başlığı gizledik, daha temiz durur
         uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}", label_visibility="collapsed")
         if uploaded_file:
             img = Image.open(uploaded_file)
@@ -163,7 +144,6 @@ with col_sag:
             st.rerun()
             
     elif mod == SECENEK_KAMERA:
-        # label_visibility="collapsed" başlığı gizler
         cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}", label_visibility="collapsed")
         if cam_img:
             img = Image.open(cam_img)
@@ -193,8 +173,8 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
             try:
                 genai.configure(api_key=SABIT_API_KEY)
                 
-                # --- MODEL ---
-                model = genai.GenerativeModel("gemini-flash-latest")
+                # --- ÇÖZÜM BURADA: LİSTEDEKİ ÇALIŞAN MODEL ---
+                model = genai.GenerativeModel("gemini-2.0-flash-lite-preview-02-05")
                 
                 base_prompt = """
                 Sen öğretmensin. Sınav kağıdını oku ve puanla.
