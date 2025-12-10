@@ -35,6 +35,26 @@ st.markdown("""
     h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
     h2 { font-size: 2rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.5rem !important; }
+
+    /* --- KAMERA BUTONU TÜRKÇELEŞTİRME --- */
+    button[kind="primary"] { color: transparent !important; }
+    div[data-testid="stCameraInput"] button[kind="primary"]::after {
+        content: "📸 FOTOĞRAFI ÇEK";
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; align-items: center; justify-content: center;
+    }
+    div[data-testid="stCameraInput"] button[kind="secondary"] { color: transparent !important; }
+    div[data-testid="stCameraInput"] button[kind="secondary"]::after {
+        content: "🔄 Yeniden Çek";
+        color: #31333F;
+        font-weight: bold;
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        display: flex; align-items: center; justify-content: center;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -78,7 +98,7 @@ def extract_json(text):
         return text
 
 # ==========================================
-# 2. ARAYÜZ (Ana Sayfa)
+# 2. ARAYÜZ
 # ==========================================
 with st.sidebar:
     st.header("⚙️ Durum")
@@ -87,44 +107,40 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("© SİNAN SAYILIR")
+    st.caption("Yazılı Oku v2.4 - Exp Model")
 
-st.title("🧠 AI Sınav Okuma V52")
+st.title("🧠 AI Sınav Okuma V5.4")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
 
-# SOL: Ayarlar
 with col_sol:
     st.header("1. İstekler (Varsa)")
-    ogretmen_promptu = st.text_area("Öğretmen Notu:", height=150, placeholder="Değerlendirme sırasında yapay zekaya direktiflerinizi yazabilirsiniz.")
+    ogretmen_promptu = st.text_area("Öğretmen Notu:", height=150, placeholder="Değerlendirme notu...")
     with st.expander("Görsel Cevap Anahtarı (Opsiyonel)"):
         rubrik_dosyasi = st.file_uploader("Cevap Anahtarı Resmi", type=["jpg", "png", "jpeg"], key="rubrik_up")
         rubrik_img = Image.open(rubrik_dosyasi) if rubrik_dosyasi else None
         if rubrik_img: st.image(rubrik_img, width=200)
 
-# SAĞ: Yükleme
 with col_sag:
     st.header("2. Öğrenci Kağıdı")
     
-    # --- GARANTİ ÇÖZÜM: Değişken Kullanımı ---
     SECENEK_DOSYA = "📂 Dosya Yükle"
     SECENEK_KAMERA = "📸 Kameradan Çek"
     
     mod = st.radio("Yükleme Yöntemi:", [SECENEK_DOSYA, SECENEK_KAMERA], horizontal=True)
     st.markdown("---")
 
-    # İsimleri değişkenle kontrol ediyoruz, hata şansı %0
     if mod == SECENEK_DOSYA:
-        uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}")
+        uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}", label_visibility="collapsed")
         if uploaded_file:
             img = Image.open(uploaded_file)
             st.session_state.yuklenen_resimler_v3.append(img)
             reset_file()
             st.rerun()
             
-    elif mod == SECENEK_KAMERA:  # Sadece ve sadece bu seçilirse çalışır
-        cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}")
+    elif mod == SECENEK_KAMERA:
+        cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}", label_visibility="collapsed")
         if cam_img:
             img = Image.open(cam_img)
             st.session_state.yuklenen_resimler_v3.append(img)
@@ -138,14 +154,11 @@ with col_sag:
             with cols[i % 4]: st.image(img, use_container_width=True, caption=f"Sayfa {i+1}")
         if st.button("🗑️ Temizle", type="secondary", use_container_width=True): listeyi_temizle()
 
-# ==========================================
-# 3. YAPAY ZEKA İŞLEMİ
-# ==========================================
 st.markdown("---")
 
 if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=True):
     if not SABIT_API_KEY:
-        st.error("🚨 API Anahtarı Eksik! (Settings > Secrets)")
+        st.error("🚨 API Anahtarı Eksik!")
     elif len(st.session_state.yuklenen_resimler_v3) == 0:
         st.warning("⚠️ Kağıt yüklemediniz.")
     else:
@@ -153,8 +166,9 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
             try:
                 genai.configure(api_key=SABIT_API_KEY)
                 
-                # --- MODEL ---
-                model = genai.GenerativeModel("gemini-flash-latest")
+                # --- SON ŞANS: ARALIK AYI DENEYSEL MODELİ ---
+                # Bu modelin kotası genellikle 2.0'dan farklıdır.
+                model = genai.GenerativeModel("gemini-exp-1206")
                 
                 base_prompt = """
                 Sen öğretmensin. Sınav kağıdını oku ve puanla.
