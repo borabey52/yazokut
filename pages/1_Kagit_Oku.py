@@ -52,7 +52,7 @@ col_sol, col_sag = st.columns([1, 1], gap="large")
 # SOL: Ayarlar
 with col_sol:
     st.header("1. Özel İstekler (Varsa)")
-    placeholder="Değerlendirme sırasında yapay zekanın göz önünde bulundurmasını istediklerinizi buraya yazabilirsiniz")
+    ogretmen_promptu = st.text_area("Öğretmen Notları", height=150, placeholder="Değerlendirme sırasında yapay zekanın göz önünde bulundurmasını istediklerinizi buraya yazabilirsiniz")
     with st.expander("Görsel Cevap Anahtarı (Opsiyonel)"):
         rubrik_dosyasi = st.file_uploader("Cevap Anahtarı Resmi", type=["jpg", "png", "jpeg"], key="rubrik_up")
         rubrik_img = Image.open(rubrik_dosyasi) if rubrik_dosyasi else None
