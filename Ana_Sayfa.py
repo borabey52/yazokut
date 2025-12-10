@@ -87,7 +87,7 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("Yazılı Oku v2.1 - Tasarım")
+    st.caption("© SİNAN SAYILIR")
 
 st.title("🧠 AI Sınav Okuma V5.2")
 st.markdown("---")
@@ -109,7 +109,7 @@ with col_sag:
     
     # --- DÜZELTME BURADA YAPILDI ---
     # Seçenek ismini ve IF sorgusunu eşitledim: "📂 Dosya Yükle"
-    mod = st.radio("Yükleme:", ["📂 Dosya Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
+    mod = st.radio("Yükleme:", ["📂 Kağıt Görseli Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
     st.markdown("---")
 
     # Artık bu isimler tuttuğu için varsayılan olarak burası çalışacak (Kamera açılmayacak)
