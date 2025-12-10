@@ -109,7 +109,7 @@ with col_sag:
     
     # --- DÜZELTME BURADA YAPILDI ---
     # Seçenek ismini ve IF sorgusunu eşitledim: "📂 Dosya Yükle"
-    mod = st.radio("Yükleme:", ["📂 Kağıt Görseli Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
+    mod = st.radio("Yükleme:", ["📂 Kağıt Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
     st.markdown("---")
 
     # Artık bu isimler tuttuğu için varsayılan olarak burası çalışacak (Kamera açılmayacak)
