@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Sınav Asistanı Ana Sayfa", layout="wide")
 
-st.title("🏫 AI Sınav Okuma Sistemi")
+st.title("🏫 AI Sınav Okuma - Sinan S. V3.8")
 st.info("Soldaki menüden işlem seçebilirsiniz.")
 
 # --- TÜM SİSTEMİN HAFIZASI BURADA BAŞLAR ---
