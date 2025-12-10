@@ -51,7 +51,7 @@ col_sol, col_sag = st.columns([1, 1], gap="large")
 
 # SOL: Ayarlar
 with col_sol:
-    st.header("1. Kriterler")
+    st.header("1. Özel İstekler (Varsa)")
     ogretmen_promptu = st.text_area("Öğretmen Notu / Cevap Anahtarı:", height=150, placeholder="Örn: 1. Soru 10 puan...")
     with st.expander("Görsel Cevap Anahtarı (Opsiyonel)"):
         rubrik_dosyasi = st.file_uploader("Cevap Anahtarı Resmi", type=["jpg", "png", "jpeg"], key="rubrik_up")
