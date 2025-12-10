@@ -149,9 +149,9 @@ if st.button("✅ KAĞIDI OKU VE DEĞERLENDİR",
         with st.spinner("Yapay zeka analiz yapıyor..."):
             try:
                 genai.configure(api_key=SABIT_API_KEY)
-                model = genai.GenerativeModel(
-                    "gemini-1.5-flash")  # Model ismini güncel tuttum
-
+                # Satırı bul ve böyle olduğundan emin ol:
+model = genai.GenerativeModel("gemini-1.5-flash")
+               
                 # --- PROMPT ---
                 base_prompt = """
                 Rol: Deneyimli Türk Öğretmeni.
