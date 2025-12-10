@@ -150,7 +150,7 @@ if st.button("✅ KAĞIDI OKU VE DEĞERLENDİR",
             try:
                 genai.configure(api_key=SABIT_API_KEY)
                 model = genai.GenerativeModel(
-                    "gemini-1.5-flash")  # Model ismini güncel tuttum
+                    "gemini-2.5-flash")  # Model ismini güncel tuttum
 
                 # --- PROMPT ---
                 base_prompt = """
