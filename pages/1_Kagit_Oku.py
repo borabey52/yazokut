@@ -8,7 +8,17 @@ import json
 
 import re
 
-
+# --- DEDEKTİF KODU BAŞLANGICI ---
+st.error(f"🔍 Şu an Yüklü Kütüphane Sürümü: {genai.__version__}")
+st.write("🌍 Google'ın Bu Hesap İçin İzin Verdiği Modeller:")
+try:
+    genai.configure(api_key=SABIT_API_KEY)
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            st.code(m.name) # Bize lazım olan isimler burada çıkacak
+except Exception as e:
+    st.error(f"Listeleme Hatası: {e}")
+# --- DEDEKTİF KODU BİTİŞİ ---
 
 # ==========================================
 
