@@ -35,6 +35,46 @@ st.markdown("""
     h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
     h2 { font-size: 2rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.5rem !important; }
+
+    /* --- KAMERA BUTONU TÜRKÇELEŞTİRME HİLESİ --- */
+    /* 1. Orijinal 'Take Photo' yazısını görünmez yap */
+    button[kind="primary"] {
+        color: transparent !important;
+    }
+    
+    /* 2. Üzerine 'Fotoğrafı Çek' yazısı ekle */
+    div[data-testid="stCameraInput"] button[kind="primary"]::after {
+        content: "📸 FOTOĞRAFI ÇEK";
+        color: white;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* 3. 'Clear Photo' yazısını Türkçeleştir (Fotoğrafı çektikten sonra çıkan buton) */
+    div[data-testid="stCameraInput"] button[kind="secondary"] {
+        color: transparent !important;
+    }
+    div[data-testid="stCameraInput"] button[kind="secondary"]::after {
+        content: "🔄 Yeniden Çek";
+        color: #31333F;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
@@ -87,9 +127,9 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("© SİNAN SAYILIR")
+    st.caption("Yazılı Oku v2.2 - Final")
 
-st.title("🧠 AI Sınav Okuma V52")
+st.title("🧠 AI Sınav Okuma V5.2")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
@@ -107,24 +147,24 @@ with col_sol:
 with col_sag:
     st.header("2. Öğrenci Kağıdı")
     
-    # --- GARANTİ ÇÖZÜM: Değişken Kullanımı ---
     SECENEK_DOSYA = "📂 Dosya Yükle"
     SECENEK_KAMERA = "📸 Kameradan Çek"
     
     mod = st.radio("Yükleme Yöntemi:", [SECENEK_DOSYA, SECENEK_KAMERA], horizontal=True)
     st.markdown("---")
 
-    # İsimleri değişkenle kontrol ediyoruz, hata şansı %0
     if mod == SECENEK_DOSYA:
-        uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}")
+        # label_visibility="collapsed" ile başlığı gizledik, daha temiz durur
+        uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}", label_visibility="collapsed")
         if uploaded_file:
             img = Image.open(uploaded_file)
             st.session_state.yuklenen_resimler_v3.append(img)
             reset_file()
             st.rerun()
             
-    elif mod == SECENEK_KAMERA:  # Sadece ve sadece bu seçilirse çalışır
-        cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}")
+    elif mod == SECENEK_KAMERA:
+        # label_visibility="collapsed" başlığı gizler
+        cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}", label_visibility="collapsed")
         if cam_img:
             img = Image.open(cam_img)
             st.session_state.yuklenen_resimler_v3.append(img)
