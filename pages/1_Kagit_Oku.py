@@ -44,7 +44,7 @@ def extract_json(text):
 # ==========================================
 # 2. ARAYÜZ
 # ==========================================
-st.title("🧠 AI Sınav Okuma Sistemi (v2.0)")
+st.title("🧠 AI Sınav Okuma - Sinan S. V3.8")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
