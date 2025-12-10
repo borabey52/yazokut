@@ -84,23 +84,23 @@ def extract_json(text):
 # 2. ARAYÜZ (Ana Sayfa)
 # ==========================================
 with st.sidebar:
-    st.header("⚙️ Genel İşlemler")
-    st.info(f"📂 Hafızada Okunmuş Kağıt: **{len(st.session_state.sinif_verileri)}**")
+    st.header("⚙️ Durum")
+    st.info(f"📂 Okunan Kağıt: **{len(st.session_state.sinif_verileri)}**")
     if len(st.session_state.sinif_verileri) > 0:
-        if st.button("🚨 YENİ SINIF (Hafızayı Sil)", type="primary", use_container_width=True):
+        if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
     st.caption("Yazılı Oku v2.1 - Tasarım")
 
-st.title("🧠 AI Sınav Okuma Sistemi")
+st.title("🧠 AI Sınav Okuma V5.2")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
 
 # SOL: Ayarlar
 with col_sol:
-    st.header("1. Kriterler")
-    ogretmen_promptu = st.text_area("Öğretmen Notu / Cevap Anahtarı:", height=150, placeholder="Örn: 1. Soru 10 puan...")
+    st.header("1. İstekler (Varsa)")
+    ogretmen_promptu = st.text_area("Öğretmen Notu:", height=150, placeholder="Değerlendirme sırasında yapay zekaya direktiflerinizi yazabilirsiniz.")
     with st.expander("Görsel Cevap Anahtarı (Opsiyonel)"):
         rubrik_dosyasi = st.file_uploader("Cevap Anahtarı Resmi", type=["jpg", "png", "jpeg"], key="rubrik_up")
         rubrik_img = Image.open(rubrik_dosyasi) if rubrik_dosyasi else None
@@ -109,7 +109,7 @@ with col_sol:
 # SAĞ: Yükleme
 with col_sag:
     st.header("2. Öğrenci Kağıdı")
-    mod = st.radio("Yükleme:", ["📂 Dosya Yükle", "📸 Kamera"], horizontal=True)
+    mod = st.radio("Yükleme:", ["📂 Kağıt Görseli Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
     st.markdown("---")
 
     if mod == "📂 Dosya Yükle":
