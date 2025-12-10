@@ -87,9 +87,9 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("Yazılı Oku v2.2 - Final")
+    st.caption("© SİNAN SAYILIR")
 
-st.title("🧠 AI Sınav Okuma V5.2")
+st.title("🧠 AI Sınav Okuma V52")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
