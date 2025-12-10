@@ -8,16 +8,31 @@ import json
 
 import re
 
-# --- DEDEKTİF KODU BAŞLANGICI ---
-st.error(f"🔍 Şu an Yüklü Kütüphane Sürümü: {genai.__version__}")
-st.write("🌍 Google'ın Bu Hesap İçin İzin Verdiği Modeller:")
-try:
-    genai.configure(api_key=SABIT_API_KEY)
-    for m in genai.list_models():
-        if 'generateContent' in m.supported_generation_methods:
-            st.code(m.name) # Bize lazım olan isimler burada çıkacak
-except Exception as e:
-    st.error(f"Listeleme Hatası: {e}")
+# --- DEDEKTİF KODU BAŞLANGICI (DÜZELTİLDİ) ---
+import streamlit as st
+import google.generativeai as genai
+
+st.error(f"🔍 Kütüphane Sürümü: {genai.__version__}")
+
+# Şifreyi direkt kasadan alıyoruz (Hata vermemesi için)
+gizli_anahtar = st.secrets.get("GOOGLE_API_KEY", "")
+
+if not gizli_anahtar:
+    st.error("🚨 Kasa boş! API Anahtarı bulunamadı.")
+else:
+    try:
+        genai.configure(api_key=gizli_anahtar)
+        st.success("✅ Bağlantı Başarılı! İşte Senin Model Listen:")
+        st.write("👇 Bu listeyi kopyalayıp bana at:")
+        
+        modeller = []
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                modeller.append(m.name)
+                st.code(m.name) # Ekrana model isimlerini yazdırır
+                
+    except Exception as e:
+        st.error(f"Hata Detayı: {e}")
 # --- DEDEKTİF KODU BİTİŞİ ---
 
 # ==========================================
