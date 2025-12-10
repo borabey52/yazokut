@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Sınav Okuma", layout="wide")
 
 st.markdown("""
     <style>
-    /* --- SOL MENÜ TASARIMI --- */
+    /* SOL MENÜ TASARIMI */
     [data-testid="stSidebarNav"] a {
         background-color: #f0f2f6;
         padding: 15px;
@@ -31,7 +31,7 @@ st.markdown("""
         border-color: #b0b0b0;
     }
     
-    /* --- BAŞLIK BOYUTLARI --- */
+    /* BAŞLIK BOYUTLARI */
     h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
     h2 { font-size: 2rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.5rem !important; }
@@ -87,7 +87,7 @@ with st.sidebar:
         if st.button("🚨 Yeni Sınıf (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("© SİNAN SAYILIR")
+    st.caption("Yazılı Oku v2.2 - Final")
 
 st.title("🧠 AI Sınav Okuma V5.2")
 st.markdown("---")
@@ -107,21 +107,24 @@ with col_sol:
 with col_sag:
     st.header("2. Öğrenci Kağıdı")
     
-    # --- DÜZELTME BURADA YAPILDI ---
-    # Seçenek ismini ve IF sorgusunu eşitledim: "📂 Dosya Yükle"
-    mod = st.radio("Yükleme:", ["📂 Kağıt Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
+    # --- GARANTİ ÇÖZÜM: Değişken Kullanımı ---
+    SECENEK_DOSYA = "📂 Dosya Yükle"
+    SECENEK_KAMERA = "📸 Kameradan Çek"
+    
+    mod = st.radio("Yükleme Yöntemi:", [SECENEK_DOSYA, SECENEK_KAMERA], horizontal=True)
     st.markdown("---")
 
-    # Artık bu isimler tuttuğu için varsayılan olarak burası çalışacak (Kamera açılmayacak)
-    if mod == "📂 Dosya Yükle":
+    # İsimleri değişkenle kontrol ediyoruz, hata şansı %0
+    if mod == SECENEK_DOSYA:
         uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}")
         if uploaded_file:
             img = Image.open(uploaded_file)
             st.session_state.yuklenen_resimler_v3.append(img)
             reset_file()
             st.rerun()
-    else:
-        cam_img = st.camera_input("Çek", key=f"cam_{st.session_state.cam_key}")
+            
+    elif mod == SECENEK_KAMERA:  # Sadece ve sadece bu seçilirse çalışır
+        cam_img = st.camera_input("Fotoğrafı Çek", key=f"cam_{st.session_state.cam_key}")
         if cam_img:
             img = Image.open(cam_img)
             st.session_state.yuklenen_resimler_v3.append(img)
