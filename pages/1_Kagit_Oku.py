@@ -279,7 +279,7 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
 
                 # Resim okuyabilen tek hızlı model budur.
 
-                model = genai.GenerativeModel("gemini-1.5-flash")
+                model = genai.GenerativeModel("gemini-1.5-flash-001")
 
                 
 
