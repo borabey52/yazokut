@@ -60,9 +60,9 @@ with st.sidebar:
         if st.button("🚨 YENİ SINIF (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("Yazılı Oku v2.0 - Gemini Flash Latest")
+    st.caption("© Sinan Sayılır")
 
-st.title("🧠 AI Sınav Okuma Sistemi")
+st.title("🧠 AI Sınav Okuma - Sinan S. V3.8")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
