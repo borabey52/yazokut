@@ -11,7 +11,6 @@ st.set_page_config(page_title="AI Sınav Okuma", layout="wide")
 st.markdown("""
     <style>
     /* --- SOL MENÜ TASARIMI --- */
-    /* Linkleri Buton Gibi Yap */
     [data-testid="stSidebarNav"] a {
         background-color: #f0f2f6;
         padding: 15px;
@@ -25,7 +24,6 @@ st.markdown("""
         border: 1px solid #dcdcdc;
         transition: all 0.3s;
     }
-    /* Üzerine gelince efekt */
     [data-testid="stSidebarNav"] a:hover {
         background-color: #e6e9ef;
         transform: scale(1.02);
@@ -37,7 +35,6 @@ st.markdown("""
     h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
     h2 { font-size: 2rem !important; font-weight: 700 !important; }
     h3 { font-size: 1.5rem !important; }
-    
     </style>
 """, unsafe_allow_html=True)
 
@@ -109,94 +106,6 @@ with col_sol:
 # SAĞ: Yükleme
 with col_sag:
     st.header("2. Öğrenci Kağıdı")
-    mod = st.radio("Yükleme:", ["📂 Kağıt Görseli Yükle", "📸 Kameradan Foto Çek"], horizontal=True)
-    st.markdown("---")
-
-    if mod == "📂 Dosya Yükle":
-        uploaded_file = st.file_uploader("Kağıt Seç", type=["jpg", "png", "jpeg"], key=f"file_{st.session_state.file_key}")
-        if uploaded_file:
-            img = Image.open(uploaded_file)
-            st.session_state.yuklenen_resimler_v3.append(img)
-            reset_file()
-            st.rerun()
-    else:
-        cam_img = st.camera_input("Çek", key=f"cam_{st.session_state.cam_key}")
-        if cam_img:
-            img = Image.open(cam_img)
-            st.session_state.yuklenen_resimler_v3.append(img)
-            reset_cam()
-            st.rerun()
-
-    if len(st.session_state.yuklenen_resimler_v3) > 0:
-        st.success(f"📎 {len(st.session_state.yuklenen_resimler_v3)} sayfa hafızada.")
-        cols = st.columns(4)
-        for i, img in enumerate(st.session_state.yuklenen_resimler_v3):
-            with cols[i % 4]: st.image(img, use_container_width=True, caption=f"Sayfa {i+1}")
-        if st.button("🗑️ Temizle", type="secondary", use_container_width=True): listeyi_temizle()
-
-# ==========================================
-# 3. YAPAY ZEKA İŞLEMİ
-# ==========================================
-st.markdown("---")
-
-if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=True):
-    if not SABIT_API_KEY:
-        st.error("🚨 API Anahtarı Eksik! (Settings > Secrets)")
-    elif len(st.session_state.yuklenen_resimler_v3) == 0:
-        st.warning("⚠️ Kağıt yüklemediniz.")
-    else:
-        with st.spinner("Yapay zeka kağıdı okuyor..."):
-            try:
-                genai.configure(api_key=SABIT_API_KEY)
-                
-                # --- MODEL ---
-                model = genai.GenerativeModel("gemini-flash-latest")
-                
-                base_prompt = """
-                Sen öğretmensin. Sınav kağıdını oku ve puanla.
-                ÇIKTI (SADECE JSON):
-                {
-                  "kimlik": { "ad_soyad": "...", "numara": "..." },
-                  "degerlendirme": [
-                    { "no": "1", "soru": "...", "cevap": "...", "puan": 0, "tam_puan": 10, "yorum": "..." }
-                  ]
-                }
-                """
-                content = [base_prompt]
-                if ogretmen_promptu: content.append(f"NOT: {ogretmen_promptu}")
-                if rubrik_img: content.extend(["CEVAP ANAHTARI:", rubrik_img])
-                content.append("KAĞITLAR:")
-                content.extend(st.session_state.yuklenen_resimler_v3)
-
-                response = model.generate_content(content)
-                json_text = extract_json(response.text)
-                data = json.loads(json_text)
-
-                kimlik = data.get("kimlik", {})
-                sorular = data.get("degerlendirme", [])
-                toplam = sum([float(x.get('puan', 0)) for x in sorular])
-                maksimum = sum([float(x.get('tam_puan', 0)) for x in sorular])
-
-                st.balloons()
-                
-                with st.container(border=True):
-                    c1, c2, c3 = st.columns(3)
-                    c1.metric("Öğrenci", kimlik.get("ad_soyad", "-"))
-                    c2.metric("No", kimlik.get("numara", "-"))
-                    c3.markdown(f"<h2 style='color:green'>{int(toplam)} / {int(maksimum)}</h2>", unsafe_allow_html=True)
-
-                kayit = {"Ad Soyad": kimlik.get("ad_soyad", "-"), "Numara": kimlik.get("numara", "-"), "Toplam Puan": toplam}
-                for s in sorular: kayit[f"Soru {s.get('no')}"] = s.get('puan', 0)
-                st.session_state.sinif_verileri.append(kayit)
-                st.toast("Kaydedildi!")
-
-                for s in sorular:
-                    p = s.get('puan', 0)
-                    tp = s.get('tam_puan', 0)
-                    renk = "green" if p==tp else "red" if p==0 else "orange"
-                    with st.expander(f"Soru {s.get('no')} ({int(p)}/{int(tp)})"):
-                        st.write(f"**Cevap:** {s.get('cevap')}")
-                        st.markdown(f"**Yorum:** :{renk}[{s.get('yorum')}]")
-
-            except Exception as e:
-                st.error(f"Hata: {e}")
+    
+    # --- DÜZELTME BURADA YAPILDI ---
+    # Seçenek ismini ve IF
