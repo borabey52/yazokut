@@ -2,14 +2,14 @@ import streamlit as st
 import pandas as pd
 import io
 
-# Sayfa Ayarları
 st.set_page_config(page_title="Analiz Raporu", layout="wide")
 
 # ==========================================
-# 1. YAZICI DOSTU TASARIM (CSS)
+# 1. TASARIM (CSS) - BUTONLAR VE BÜYÜK BAŞLIKLAR
 # ==========================================
 st.markdown("""
     <style>
+    /* --- YAZDIRMA AYARLARI --- */
     @media print {
         [data-testid="stSidebar"] { display: none !important; }
         header { display: none !important; }
@@ -18,6 +18,31 @@ st.markdown("""
         .block-container { padding-top: 0rem !important; padding-bottom: 0rem !important; }
         .stApp { background-color: white !important; }
     }
+
+    /* --- SOL MENÜ BUTONLARI --- */
+    [data-testid="stSidebarNav"] a {
+        background-color: #f0f2f6;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-decoration: none !important;
+        color: #31333F !important;
+        font-weight: 700;
+        display: block;
+        text-align: center;
+        border: 1px solid #dcdcdc;
+        transition: all 0.3s;
+    }
+    [data-testid="stSidebarNav"] a:hover {
+        background-color: #e6e9ef;
+        transform: scale(1.02);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    /* --- BAŞLIK BOYUTLARI --- */
+    h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
+    h2 { font-size: 2rem !important; font-weight: 700 !important; }
+    h3 { font-size: 1.5rem !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -57,7 +82,7 @@ if 'Toplam Puan' in df.columns:
 st.markdown("---")
 
 # ==========================================
-# 5. DETAYLI LİSTE (ARTIK ÜSTTE)
+# 5. DETAYLI LİSTE
 # ==========================================
 st.subheader("📋 Öğrenci Not Listesi")
 st.dataframe(gosterilecek_df, use_container_width=True)
@@ -65,7 +90,7 @@ st.dataframe(gosterilecek_df, use_container_width=True)
 st.markdown("---")
 
 # ==========================================
-# 6. SORU ANALİZİ GRAFİĞİ 📈 (ARTIK ALTTA)
+# 6. SORU ANALİZİ GRAFİĞİ 📈
 # ==========================================
 st.subheader("📈 Soru Başarı Analizi")
 
@@ -84,7 +109,7 @@ except Exception as e:
 st.markdown("---")
 
 # ==========================================
-# 7. RAPORLAMA BUTONLARI (EN ALT)
+# 7. RAPORLAMA BUTONLARI
 # ==========================================
 col1, col2 = st.columns(2)
 
@@ -114,4 +139,4 @@ with col2:
             use_container_width=True
         )
     except Exception as e:
-        st.error("Excel hatası: openpyxl kütüphanesini kontrol edin.")
+        st.error("Excel hatası oluştu.")
