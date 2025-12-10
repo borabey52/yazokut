@@ -4,9 +4,42 @@ from PIL import Image
 import json
 
 # ==========================================
-# 1. AYARLAR & GÜVENLİK
+# 1. AYARLAR & TASARIM (CSS)
 # ==========================================
 st.set_page_config(page_title="AI Sınav Okuma", layout="wide")
+
+st.markdown("""
+    <style>
+    /* --- SOL MENÜ TASARIMI --- */
+    /* Linkleri Buton Gibi Yap */
+    [data-testid="stSidebarNav"] a {
+        background-color: #f0f2f6;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        text-decoration: none !important;
+        color: #31333F !important;
+        font-weight: 700;
+        display: block;
+        text-align: center;
+        border: 1px solid #dcdcdc;
+        transition: all 0.3s;
+    }
+    /* Üzerine gelince efekt */
+    [data-testid="stSidebarNav"] a:hover {
+        background-color: #e6e9ef;
+        transform: scale(1.02);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-color: #b0b0b0;
+    }
+    
+    /* --- BAŞLIK BOYUTLARI --- */
+    h1 { font-size: 3rem !important; font-weight: 800 !important; color: #1E3A8A; }
+    h2 { font-size: 2rem !important; font-weight: 700 !important; }
+    h3 { font-size: 1.5rem !important; }
+    
+    </style>
+""", unsafe_allow_html=True)
 
 # API Anahtarı
 if "GOOGLE_API_KEY" in st.secrets:
@@ -23,14 +56,12 @@ if 'file_key' not in st.session_state: st.session_state.file_key = 0
 def reset_cam(): st.session_state.cam_key += 1
 def reset_file(): st.session_state.file_key += 1
 
-# Sadece o anki öğrencinin kağıtlarını siler
 def listeyi_temizle():
     st.session_state.yuklenen_resimler_v3 = []
     reset_cam()
     reset_file()
     st.rerun()
 
-# Tüm Sınıf Listesini ve Hafızayı Sıfırlar (Eski main.py özelliği)
 def tam_hafiza_temizligi():
     st.session_state.sinif_verileri = []
     st.session_state.yuklenen_resimler_v3 = []
@@ -52,7 +83,6 @@ def extract_json(text):
 # ==========================================
 # 2. ARAYÜZ (Ana Sayfa)
 # ==========================================
-# Sol Menüye "Sınıfı Sıfırla" butonu koyalım
 with st.sidebar:
     st.header("⚙️ Genel İşlemler")
     st.info(f"📂 Hafızada Okunmuş Kağıt: **{len(st.session_state.sinif_verileri)}**")
@@ -60,9 +90,9 @@ with st.sidebar:
         if st.button("🚨 YENİ SINIF (Hafızayı Sil)", type="primary", use_container_width=True):
             tam_hafiza_temizligi()
     st.divider()
-    st.caption("© Sinan Sayılır")
+    st.caption("Yazılı Oku v2.1 - Tasarım")
 
-st.title("🧠 AI Sınav Okuma - Sinan S. V3.8")
+st.title("🧠 AI Sınav Okuma Sistemi")
 st.markdown("---")
 
 col_sol, col_sag = st.columns([1, 1], gap="large")
@@ -119,7 +149,7 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
             try:
                 genai.configure(api_key=SABIT_API_KEY)
                 
-                # --- ÇALIŞAN MODEL (LATEST) ---
+                # --- MODEL ---
                 model = genai.GenerativeModel("gemini-flash-latest")
                 
                 base_prompt = """
@@ -155,13 +185,11 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
                     c2.metric("No", kimlik.get("numara", "-"))
                     c3.markdown(f"<h2 style='color:green'>{int(toplam)} / {int(maksimum)}</h2>", unsafe_allow_html=True)
 
-                # Kayıt
                 kayit = {"Ad Soyad": kimlik.get("ad_soyad", "-"), "Numara": kimlik.get("numara", "-"), "Toplam Puan": toplam}
                 for s in sorular: kayit[f"Soru {s.get('no')}"] = s.get('puan', 0)
                 st.session_state.sinif_verileri.append(kayit)
                 st.toast("Kaydedildi!")
 
-                # Detaylar
                 for s in sorular:
                     p = s.get('puan', 0)
                     tp = s.get('tam_puan', 0)
