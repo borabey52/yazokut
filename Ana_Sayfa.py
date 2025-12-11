@@ -154,7 +154,7 @@ if st.button("✅ KAĞIDI OKU VE PUANLA", type="primary", use_container_width=Tr
                 genai.configure(api_key=SABIT_API_KEY)
                 
                 # --- MODEL ---
-                model = genai.GenerativeModel("gemini-flash-latest")
+                model = genai.GenerativeModel("gemini-1.5-flash")
                 
                 base_prompt = """
                 Sen öğretmensin. Sınav kağıdını oku ve puanla.
